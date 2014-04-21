@@ -63,7 +63,6 @@ $.fn.S3Uploader_video = (options) ->
   progress: (e, data) ->
     progress = undefined
     if data.context    
-      $("#video-upload-box").hide()
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
 
