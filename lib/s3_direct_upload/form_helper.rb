@@ -34,7 +34,6 @@ module S3DirectUpload
           id: @options[:id],
           class: @options[:class],
           method: "post",
-          authenticity_token: true,
           multipart: true,
           data: {
             callback_url: @options[:callback_url],
