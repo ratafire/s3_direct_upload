@@ -79,6 +79,12 @@ $.fn.S3Uploader = (options,ratafire_file_type,content_temp_value,content_temp_vi
           progress = parseInt(data.loaded / data.total * 100, 10)
           data.context.find('.bar-video').css('width', progress + '%')
 
+      temp_save: ->
+        content_temp = $(content_temp_value).val()
+        tags_temp = $("#tags").val()
+        $(content_temp_video_value).val content_temp
+        $(tags_temp_video_value).val tags_tem      
+              
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
 
@@ -146,13 +152,6 @@ $.fn.S3Uploader = (options,ratafire_file_type,content_temp_value,content_temp_vi
         unless 'FormData' of window
           $uploadForm.find("input[name='key']").val(settings.path + key)
         data
-
-  temp_save: ->
-    content_temp = $(content_temp_value).val()
-    tags_temp = $("#tags").val()
-    $(content_temp_video_value).val content_temp
-    $(tags_temp_video_value).val tags_tem      
-          
 
   build_content_object = ($uploadForm, file, result) ->
     content = {}
