@@ -3,7 +3,7 @@
 
 $ = jQuery
 
-$.fn.S3Uploader = (options,ratafire_file_type) ->
+$.fn.S3Uploader = (options,ratafire_file_type,content_temp_value,content_temp_video_value,tags_temp_video_value) ->
 
   # support multiple elements
   if @length > 1
@@ -146,6 +146,13 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         unless 'FormData' of window
           $uploadForm.find("input[name='key']").val(settings.path + key)
         data
+
+  temp_save: ->
+    content_temp = $(content_temp_value).val()
+    tags_temp = $("#tags").val()
+    $(content_temp_video_value).val content_temp
+    $(tags_temp_video_value).val tags_tem      
+          
 
   build_content_object = ($uploadForm, file, result) ->
     content = {}
