@@ -25,7 +25,6 @@ $.fn.S3Uploader = (options) ->
     allow_multiple_files: true
     dropZone: null
     pasteZone: null
-    ratafire_file_type: null
 
   $.extend settings, options
 
@@ -44,7 +43,7 @@ $.fn.S3Uploader = (options) ->
         file.unique_id = Math.random().toString(36).substr(2,16)
         video_types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
-        if progress_bar_target == "video" 
+        if ratafire_file_type == "video" 
           this_type = video_types
         else
           this_type = image_types
