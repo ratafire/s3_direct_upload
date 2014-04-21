@@ -23,6 +23,9 @@ $.fn.S3Uploader = (options) ->
     progress_bar_target: null
     click_submit_target: null
     allow_multiple_files: true
+    dropZone: null
+    pasteZone: null
+    ratafire_file_type: null
 
   $.extend settings, options
 
@@ -39,11 +42,16 @@ $.fn.S3Uploader = (options) ->
       add: (e, data) ->
         file = data.files[0]
         file.unique_id = Math.random().toString(36).substr(2,16)
-        types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
+        video_types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
+        image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
+        if ratafire_file_type == "video" 
+          this_type = video_types
+        else
+          this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
-          if types.test(file.type) or types.test(file.name)
+          if this_type.test(file.type) or this_type.test(file.name)
             if $('#template-upload-video').length > 0
               data.context = $($.trim(tmpl("template-upload-video", file)))
               $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
@@ -57,7 +65,10 @@ $.fn.S3Uploader = (options) ->
             else
               data.submit()
           else
-            alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+            if ratafire_file_type == "video"
+              alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+            else
+              alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
           return
 
       start: (e) ->
