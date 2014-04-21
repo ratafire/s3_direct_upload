@@ -8,7 +8,7 @@ $.fn.S3Uploader_video = (options) ->
   # support multiple elements
   if @length > 1
     @each ->
-      $(this).S3Uploader options
+      $(this).S3Uploader_video options
 
     return this
 

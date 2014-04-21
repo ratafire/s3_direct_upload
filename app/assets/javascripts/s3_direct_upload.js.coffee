@@ -39,21 +39,26 @@ $.fn.S3Uploader = (options) ->
       add: (e, data) ->
         file = data.files[0]
         file.unique_id = Math.random().toString(36).substr(2,16)
+        types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
 
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
-          if $('#template-upload').length > 0
-            data.context = $($.trim(tmpl("template-upload", file)))
-            $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-          else if !settings.allow_multiple_files
-            data.context = settings.progress_bar_target
-          if settings.click_submit_target
-            if settings.allow_multiple_files
-              forms_for_submit.push data
+          if types.test(file.type) or types.test(file.name)
+            if $('#template-upload-video').length > 0
+              data.context = $($.trim(tmpl("template-upload-video", file)))
+              $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+            else if !settings.allow_multiple_files
+              data.context = settings.progress_bar_target
+            if settings.click_submit_target
+              if settings.allow_multiple_files
+                forms_for_submit.push data
+              else
+                forms_for_submit = [data]
             else
-              forms_for_submit = [data]
+              data.submit()
           else
-            data.submit()
+            alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+          return
 
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
@@ -61,7 +66,7 @@ $.fn.S3Uploader = (options) ->
       progress: (e, data) ->
         if data.context
           progress = parseInt(data.loaded / data.total * 100, 10)
-          data.context.find('.bar').css('width', progress + '%')
+          data.context.find('.bar-video').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
