@@ -47,6 +47,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         else 
           if ratafire_file_type == "artwork"
             this_type = image_types
+          else
+            if ratafire_file_type == "icon"
+              this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
           unless file_name.test(file.name)
@@ -72,19 +75,32 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                     $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
                   else if !settings.allow_multiple_files
                     data.context = settings.progress_bar_target
-                 if settings.click_submit_target
+                  if settings.click_submit_target
                     if settings.allow_multiple_files
                       forms_for_submit.push data
                     else
                      forms_for_submit = [data]
                   else
-                    data.submit()                  
+                    data.submit()   
+                else
+                  if $('#template-upload-icon').length > 0   
+                    data.context = $($.trim(tmpl("template-upload-icon", file)))  
+                    $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                  else if !settings.allow_multiple_files
+                    data.context = settings.progress_bar_target
+                  if settings.click_submit_target
+                    if settings.allow_multiple_files
+                      forms_for_submit.push data
+                    else
+                     forms_for_submit = [data]
+                  else
+                    data.submit()                                 
             else
               if ratafire_file_type == "video"
                 alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
                 return
               else 
-                if ratafire_file_type == "artwork"
+                if ratafire_file_type == "artwork" || ratafire_file_type == "icon"
                   return
                   alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
           else
@@ -98,6 +114,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         else 
           if ratafire_file_type == "artwork"
             $("#artwork-upload-box").hide()
+          else
+            if ratafire_file_type == "icon"
+              $("icon-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
@@ -107,6 +126,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
           else 
             if ratafire_file_type == "artwork"
               data.context.find('.bar-artwork').css('width', progress + '%')
+            else
+              if ratafire_file_type == "icon"
+                data.context.find('.bar-icon').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
