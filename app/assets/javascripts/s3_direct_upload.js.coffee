@@ -49,18 +49,32 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
           if this_type.test(file.type) or this_type.test(file.name)
-            if $('#template-upload-video').length > 0
-              data.context = $($.trim(tmpl("template-upload-video", file)))
-              $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-            else if !settings.allow_multiple_files
-              data.context = settings.progress_bar_target
-            if settings.click_submit_target
-              if settings.allow_multiple_files
-                forms_for_submit.push data
+            if ratafire_file_type == "video"
+              if $('#template-upload-video').length > 0
+                data.context = $($.trim(tmpl("template-upload-video", file)))
+                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+              else if !settings.allow_multiple_files
+                data.context = settings.progress_bar_target
+              if settings.click_submit_target
+                if settings.allow_multiple_files
+                  forms_for_submit.push data
+                else
+                  forms_for_submit = [data]
               else
-                forms_for_submit = [data]
+                data.submit()
             else
-              data.submit()
+              if $('#template-upload-artwork').length > 0
+                data.context = $($.trim(tmpl("template-upload-video", file)))
+                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+              else if !settings.allow_multiple_files
+                data.context = settings.progress_bar_target
+              if settings.click_submit_target
+                if settings.allow_multiple_files
+                  forms_for_submit.push data
+                else
+                  forms_for_submit = [data]
+              else
+                data.submit()                  
           else
             if ratafire_file_type == "video"
               alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
@@ -80,7 +94,10 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
       progress: (e, data) ->
         if data.context
           progress = parseInt(data.loaded / data.total * 100, 10)
-          data.context.find('.bar-video').css('width', progress + '%')
+          if ratafire_file_type == "video"
+            data.context.find('.bar-video').css('width', progress + '%')
+          else
+            data.context.find('.bar-artwork').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
