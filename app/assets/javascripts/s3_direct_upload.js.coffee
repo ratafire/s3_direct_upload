@@ -114,9 +114,6 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         else 
           if ratafire_file_type == "artwork"
             $("#artwork-upload-box").hide()
-          else
-            if ratafire_file_type == "icon"
-              $("icon-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
