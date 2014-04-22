@@ -83,18 +83,19 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                   else
                     data.submit()   
                 else
-                  if $('#template-upload-icon').length > 0   
-                    data.context = $($.trim(tmpl("template-upload-icon", file)))  
-                    $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-                  else if !settings.allow_multiple_files
-                    data.context = settings.progress_bar_target
-                  if settings.click_submit_target
-                    if settings.allow_multiple_files
-                      forms_for_submit.push data
+                  if ratafire_file_type == "icon"
+                    if $('#template-upload-icon').length > 0   
+                      data.context = $($.trim(tmpl("template-upload-icon", file)))  
+                      $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                    else if !settings.allow_multiple_files
+                      data.context = settings.progress_bar_target
+                    if settings.click_submit_target
+                      if settings.allow_multiple_files
+                        forms_for_submit.push data
+                      else
+                      forms_for_submit = [data]
                     else
-                     forms_for_submit = [data]
-                  else
-                    data.submit()                                 
+                      data.submit()                                 
             else
               if ratafire_file_type == "video"
                 alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
