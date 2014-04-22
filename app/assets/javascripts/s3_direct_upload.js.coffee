@@ -41,6 +41,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         file.unique_id = Math.random().toString(36).substr(2,16)
         video_types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
+        file_name = /[^a-zA-Z0-9_\.]/
         if ratafire_file_type == "video" 
           this_type = video_types
         else 
@@ -48,44 +49,47 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
-          current_files.push data
-          if this_type.test(file.type) or this_type.test(file.name)
-            if ratafire_file_type == "video"
-              if $('#template-upload-video').length > 0
-                data.context = $($.trim(tmpl("template-upload-video", file)))
-                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-              else if !settings.allow_multiple_files
-                data.context = settings.progress_bar_target
-              if settings.click_submit_target
-                if settings.allow_multiple_files
-                  forms_for_submit.push data
-                else
-                  forms_for_submit = [data]
-              else
-                data.submit()
-            else 
-              if ratafire_file_type == "artwork"
-                if $('#template-upload-artwork').length > 0
-                  data.context = $($.trim(tmpl("template-upload-artwork", file)))
+          unless file_name.test(file.name)
+            current_files.push data
+            if this_type.test(file.type) or this_type.test(file.name)
+              if ratafire_file_type == "video"
+                if $('#template-upload-video').length > 0
+                  data.context = $($.trim(tmpl("template-upload-video", file)))
                   $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
                 else if !settings.allow_multiple_files
                   data.context = settings.progress_bar_target
                 if settings.click_submit_target
                   if settings.allow_multiple_files
-                    forms_for_submit.push data
+                   forms_for_submit.push data
                   else
                     forms_for_submit = [data]
                 else
-                  data.submit()                  
-          else
-            if ratafire_file_type == "video"
-              alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
-              return
-            else 
-              if ratafire_file_type == "artwork"
+                  data.submit()
+             else 
+                if ratafire_file_type == "artwork"
+                  if $('#template-upload-artwork').length > 0
+                    data.context = $($.trim(tmpl("template-upload-artwork", file)))
+                    $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                  else if !settings.allow_multiple_files
+                    data.context = settings.progress_bar_target
+                 if settings.click_submit_target
+                    if settings.allow_multiple_files
+                      forms_for_submit.push data
+                    else
+                     forms_for_submit = [data]
+                  else
+                    data.submit()                  
+            else
+              if ratafire_file_type == "video"
+                alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
                 return
-                alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
-
+              else 
+                if ratafire_file_type == "artwork"
+                  return
+                  alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
+          else
+            alert "Alphanumerics and _ only in filename." 
+            return
 
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
