@@ -49,7 +49,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
-          unless file_name.test(file.name)
+          if file_name.test(file.name) == false
             current_files.push data
             if this_type.test(file.type) or this_type.test(file.name)
               if ratafire_file_type == "video"
