@@ -53,7 +53,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
           if this_type.test(file.type) or this_type.test(file.name)
             if $('#template-upload-video').length > 0
               data.context = $($.trim(tmpl('#template-upload-video', file)))
-              $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+              $(data.context).appendTo($('#video-progress-case') || $uploadForm)
             else if !settings.allow_multiple_files
               data.context = settings.progress_bar_target
             if settings.click_submit_target
