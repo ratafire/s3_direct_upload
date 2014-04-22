@@ -3,12 +3,12 @@
 
 $ = jQuery
 
-$.fn.S3Uploader_video = (options) ->
+$.fn.S3Uploader = (options,ratafire_file_type) ->
 
   # support multiple elements
   if @length > 1
     @each ->
-      $(this).S3Uploader_video options
+      $(this).S3Uploader options
 
     return this
 
@@ -23,6 +23,8 @@ $.fn.S3Uploader_video = (options) ->
     progress_bar_target: null
     click_submit_target: null
     allow_multiple_files: true
+    dropZone: null
+    pasteZone: null
 
   $.extend settings, options
 
@@ -39,13 +41,18 @@ $.fn.S3Uploader_video = (options) ->
       add: (e, data) ->
         file = data.files[0]
         file.unique_id = Math.random().toString(36).substr(2,16)
-        types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
+        video_types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
+        image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
+        if ratafire_file_type == "video" 
+          this_type = video_types
+        else
+          this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
-          if types.test(file.type) or types.test(file.name)
+          if this_type.test(file.type) or this_type.test(file.name)
             if $('#template-upload-video').length > 0
-              data.context = $($.trim(tmpl("template-upload-video", file)))
+              data.context = $($.trim(tmpl('#template-upload-video', file)))
               $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
             else if !settings.allow_multiple_files
               data.context = settings.progress_bar_target
@@ -57,16 +64,17 @@ $.fn.S3Uploader_video = (options) ->
             else
               data.submit()
           else
-            alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+            if ratafire_file_type == "video"
+              alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+            else
+              alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
           return
 
-  progress: (e, data) ->
-    progress = undefined
-    if data.context    
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
-
+            
       progress: (e, data) ->
+        $("#video-upload-box").hide()
         if data.context
           progress = parseInt(data.loaded / data.total * 100, 10)
           data.context.find('.bar-video').css('width', progress + '%')
@@ -138,13 +146,7 @@ $.fn.S3Uploader_video = (options) ->
         unless 'FormData' of window
           $uploadForm.find("input[name='key']").val(settings.path + key)
         data
-
-  temp_save: ->
-    content_temp = $("#redactor_majorpost").val()
-    tags_temp = $("#tags").val()
-    $("#content_temp_video").val content_temp
-    $("#tags_temp_video").val tags_tem      
-
+          
   build_content_object = ($uploadForm, file, result) ->
     content = {}
     if result # Use the S3 response to set the URL to avoid character encodings bugs
