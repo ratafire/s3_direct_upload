@@ -66,7 +66,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             else 
               if ratafire_file_type == "artwork"
                 if $('#template-upload-artwork').length > 0
-                  data.context = $($.trim(tmpl("template-upload-video", file)))
+                  data.context = $($.trim(tmpl("template-upload-artwork", file)))
                   $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
                 else if !settings.allow_multiple_files
                   data.context = settings.progress_bar_target
