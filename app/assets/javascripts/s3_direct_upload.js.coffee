@@ -43,8 +43,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
         if ratafire_file_type == "video" 
           this_type = video_types
-        else if ratafire_file_type == "artwork"
-          this_type = image_types
+        else 
+          if ratafire_file_type == "artwork"
+            this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
@@ -62,42 +63,46 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                   forms_for_submit = [data]
               else
                 data.submit()
-            else if ratafire_file_type == "artwork"
-              if $('#template-upload-artwork').length > 0
-                data.context = $($.trim(tmpl("template-upload-video", file)))
-                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-              else if !settings.allow_multiple_files
-                data.context = settings.progress_bar_target
-              if settings.click_submit_target
-                if settings.allow_multiple_files
-                  forms_for_submit.push data
+            else 
+              if ratafire_file_type == "artwork"
+                if $('#template-upload-artwork').length > 0
+                  data.context = $($.trim(tmpl("template-upload-video", file)))
+                  $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                else if !settings.allow_multiple_files
+                  data.context = settings.progress_bar_target
+                if settings.click_submit_target
+                  if settings.allow_multiple_files
+                    forms_for_submit.push data
+                  else
+                    forms_for_submit = [data]
                 else
-                  forms_for_submit = [data]
-              else
-                data.submit()                  
+                  data.submit()                  
           else
             if ratafire_file_type == "video"
               alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
               return
-            else if ratafire_file_type == "artwork"
-              return
-              alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
+            else 
+              if ratafire_file_type == "artwork"
+                return
+                alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
 
 
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
         if ratafire_file_type == "video" 
           $("#video-upload-box").hide()
-        else if ratafire_file_type == "artwork"
-          $("#artwork-upload-box").hide()
+        else 
+          if ratafire_file_type == "artwork"
+            $("#artwork-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
           progress = parseInt(data.loaded / data.total * 100, 10)
           if ratafire_file_type == "video"
             data.context.find('.bar-video').css('width', progress + '%')
-          else if ratafire_file_type == "artwork"
-            data.context.find('.bar-artwork').css('width', progress + '%')
+          else 
+            if ratafire_file_type == "artwork"
+              data.context.find('.bar-artwork').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
