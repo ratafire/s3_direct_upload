@@ -79,6 +79,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             $("#video-upload-box").hide()
           else
             $("#artwork-upload-box").hide()
+            
           progress = parseInt(data.loaded / data.total * 100, 10)
           data.context.find('.bar-video').css('width', progress + '%')
 
