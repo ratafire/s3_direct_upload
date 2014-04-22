@@ -49,7 +49,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             this_type = image_types
 
         unless settings.before_add and not settings.before_add(file)
-          if file_name.test(file.name) == false
+          unless file_name.test(file.name)
             current_files.push data
             if this_type.test(file.type) or this_type.test(file.name)
               if ratafire_file_type == "video"
@@ -65,7 +65,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                     forms_for_submit = [data]
                 else
                   data.submit()
-             else 
+              else 
                 if ratafire_file_type == "artwork"
                   if $('#template-upload-artwork').length > 0
                     data.context = $($.trim(tmpl("template-upload-artwork", file)))
