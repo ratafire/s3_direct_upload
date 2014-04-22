@@ -3,7 +3,7 @@
 
 $ = jQuery
 
-$.fn.S3Uploader = (options) ->
+$.fn.S3Uploader = (options,ratafire_file_type) ->
 
   # support multiple elements
   if @length > 1
