@@ -146,14 +146,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         unless 'FormData' of window
           $uploadForm.find("input[name='key']").val(settings.path + key)
         data
-
-  temp_save: ->
-    content_temp = $(content_temp_value).val()
-    tags_temp = $("#tags").val()
-    $(content_temp_video_value).val content_temp
-    $(tags_temp_video_value).val tags_tem      
           
-
   build_content_object = ($uploadForm, file, result) ->
     content = {}
     if result # Use the S3 response to set the URL to avoid character encodings bugs
