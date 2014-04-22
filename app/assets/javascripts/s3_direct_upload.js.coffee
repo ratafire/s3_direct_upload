@@ -70,9 +70,6 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
               alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
           return
 
-  progress: (e, data) ->
-    progress = undefined
-    if data.context 
       start: (e) ->
         $uploadForm.trigger("s3_uploads_start", [e])
         if ratafire_file_type == "video"
