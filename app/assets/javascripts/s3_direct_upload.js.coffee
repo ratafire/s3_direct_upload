@@ -51,20 +51,11 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         unless settings.before_add and not settings.before_add(file)
           current_files.push data
           if this_type.test(file.type) or this_type.test(file.name)
-
-            if ratafire_file_type == "video"
-              if $('#template-upload-video').length > 0
-                data.context = $($.trim(tmpl('#template-upload-video', file)))
-                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-              else if !settings.allow_multiple_files
-                data.context = settings.progress_bar_target
-            else
-              if $('#template-upload-artwork').length > 0
-                data.context = $($.trim(tmpl('#template-upload-artwork', file)))
-                $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
-              else if !settings.allow_multiple_files
-                data.context = settings.progress_bar_target  
-
+            if $('#template-upload-ratafire').length > 0
+              data.context = $($.trim(tmpl('#template-upload-ratafire', file)))
+              $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+            else if !settings.allow_multiple_files
+              data.context = settings.progress_bar_target
             if settings.click_submit_target
               if settings.allow_multiple_files
                 forms_for_submit.push data
@@ -88,7 +79,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             $("#video-upload-box").hide()
           else
             $("#artwork-upload-box").hide()
-
+            
           progress = parseInt(data.loaded / data.total * 100, 10)
           data.context.find('.bar-video').css('width', progress + '%')
 
