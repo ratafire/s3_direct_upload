@@ -98,14 +98,14 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                       data.submit()                                 
             else
               if ratafire_file_type == "video"
-                #alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+                alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
                 return
               else 
                 if ratafire_file_type == "artwork" || ratafire_file_type == "icon"
                   return
-                  #alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
+                  alert "" + file.name + " is not a jpg, png, bmp, or psd image file"
           else
-            #alert "Alphanumerics and _ only in filename." 
+            alert "Alphanumerics and _ only in filename." 
             return
 
       start: (e) ->
