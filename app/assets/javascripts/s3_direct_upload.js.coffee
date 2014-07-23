@@ -39,7 +39,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
       add: (e, data) ->
         file = data.files[0]
         file.unique_id = Math.random().toString(36).substr(2,16)
-        video_types = /(\.|\/)(avi|mp4|mov|mpeg4|wmv|flv|3gpp|webm)$/i
+        video_types = /(\.|\/)(avi|mp4|mov|mpeg4|m4v|wmv|flv|3gpp|webm)$/i
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
         file_name = /[^a-zA-Z0-9_\.]/
         if ratafire_file_type == "video" 
@@ -98,7 +98,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                       data.submit()                                 
             else
               if ratafire_file_type == "video"
-                alert "" + file.name + " is not a avi, mp4, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
+                alert "" + file.name + " is not a avi, mp4, m4v, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
                 return
               else 
                 if ratafire_file_type == "artwork" || ratafire_file_type == "icon"
