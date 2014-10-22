@@ -134,15 +134,12 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         $uploadForm.trigger("s3_uploads_start", [e])
         if ratafire_file_type == "video" 
           $("#video-upload-box").hide()
-          $("#audio-upload-box").hide()
         else 
           if ratafire_file_type == "artwork"
             $("#artwork-upload-box").hide()
-            $("#audio-upload-box").hide()
           else
             if ratafire_file_type == "audio"
-              $("#video-upload-box").hide()
-              $("#artwork-upload-box").hide()
+              $("#audio-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
