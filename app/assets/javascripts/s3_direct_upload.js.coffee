@@ -42,6 +42,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         video_types = /(\.|\/)(avi|mp4|mov|mpeg4|m4v|wmv|flv|3gpp|webm)$/i
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
         audio_types = /(\.|\/)(mp3|m4a)$/i
+        pdf_types = /(\.|\/)(pdf)$/i
         file_name = /^[a-z\d\-_\s]+$/i
         if ratafire_file_type == "video" 
           this_type = video_types
