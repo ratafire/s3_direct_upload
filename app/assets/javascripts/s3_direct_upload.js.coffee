@@ -120,8 +120,8 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                         data.submit()  
                     else
                       if ratafire_file_type == "pdf"
-                        if $('#template-upload-audio').length > 0
-                          data.context = $($.trim(tmpl("template-upload-audio", file))) 
+                        if $('#template-upload-pdf').length > 0
+                          data.context = $($.trim(tmpl("template-upload-pdf", file))) 
                           $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
                         else if !settings.allow_multiple_files
                           data.context = settings.progress_bar_target
