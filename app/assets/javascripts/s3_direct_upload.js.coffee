@@ -54,6 +54,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             else
               if ratafire_file_type == "audio"
                 this_type = audio_types
+              else
+                if ratafire_file_type == "pdf"
+                  this_type = pdf_types
 
         unless settings.before_add and not settings.before_add(file)
           unless file_name.test(file.name)
@@ -113,7 +116,21 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                         else
                         forms_for_submit = [data]
                       else
-                        data.submit()                     
+                        data.submit()  
+                    else
+                      if ratafire_file_type == "pdf"
+                        if $('#template-upload-audio').length > 0
+                          data.context = $($.trim(tmpl("template-upload-audio", file))) 
+                          $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                        else if !settings.allow_multiple_files
+                          data.context = settings.progress_bar_target
+                        if settings.click_submit_target
+                          if settings.allow_multiple_files
+                            forms_for_submit.push data
+                          else
+                          forms_for_submit = [data]
+                        else
+                          data.submit()                                              
             else
               if ratafire_file_type == "video"
                 alert "" + file.name + " is not a avi, mp4, m4v, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
@@ -126,6 +143,10 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                   if ratafire_file_type == "audio"
                     return
                     alert "" + file.name + " is not a mp3 or m4a file."
+                  else
+                    if ratafire_file_type == "pdf"
+                      return
+                      alert "" + file.name + " is not a pdf file."
           else
             alert "Alphanumerics,-,_,and space only in filename." 
             return
@@ -140,6 +161,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
           else
             if ratafire_file_type == "audio"
               $("#audio-upload-box").hide()
+            else
+              if ratafire_file_type == "pdf"
+                $("#pdf-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
@@ -155,6 +179,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
               else
                 if ratafire_file_type == "audio"
                   data.context.find('.bar-audio').css('width', progress + '%')
+                else
+                  if ratafire_file_type == "pdf"
+                    data.context.find('.bar-pdf').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
