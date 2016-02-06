@@ -42,7 +42,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         file.unique_id = Math.random().toString(36).substr(2,16)
         video_types = /(\.|\/)(avi|mp4|mov|mpeg4|m4v|wmv|flv|3gpp|webm)$/i
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
-        audio_types = /(\.|\/)(mp3|m4a)$/i
+        audio_types = /(\.|\/)(mp3|m4a|wav)$/i
         pdf_types = /(\.|\/)(pdf)$/i
         file_name = /^[a-z\d\-_\s]+$/i
         if ratafire_file_type == "video" 
