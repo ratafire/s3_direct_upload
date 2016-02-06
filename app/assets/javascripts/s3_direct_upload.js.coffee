@@ -18,6 +18,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
     path: ''
     additional_data: null
     before_add: null
+    dropZone: null
     remove_completed_progress_bar: true
     remove_failed_progress_bar: false
     progress_bar_target: null
