@@ -170,7 +170,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                     else
                       if ratafire_file_type == "zip"
                         return
-                        alert "" + file.name + " is not a pdf file."
+                        alert "" + file.name + " is not a zip file."
           else
             alert "Alphanumerics,-,_,and space only in filename." 
             return
