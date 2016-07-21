@@ -44,6 +44,7 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
         image_types = /(\.|\/)(jpe?g|png|psd|bmp)$/i
         audio_types = /(\.|\/)(mp3)$/i
         pdf_types = /(\.|\/)(pdf)$/i
+        zip_types = /(\.|\/)(zip)$/i
         file_name = /^[a-z\d\-_\s]+$/i
         if ratafire_file_type == "video" 
           this_type = video_types
@@ -59,6 +60,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
               else
                 if ratafire_file_type == "pdf"
                   this_type = pdf_types
+                else
+                  if ratafire_file_type == "zip"
+                    this_type = zip_types
 
         unless settings.before_add and not settings.before_add(file)
           unless file_name.test(file.name)
@@ -132,7 +136,21 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                           else
                           forms_for_submit = [data]
                         else
-                          data.submit()                                              
+                          data.submit()   
+                      else
+                        if ratafire_file_type == "zip"
+                          if $('#template-upload-zip').length > 0
+                            data.context = $($.trim(tmpl("template-upload-zip", file))) 
+                            $(data.context).appendTo(settings.progress_bar_target || $uploadForm)
+                          else if !settings.allow_multiple_files
+                            data.context = settings.progress_bar_target
+                          if settings.click_submit_target
+                            if settings.allow_multiple_files
+                              forms_for_submit.push data
+                            else
+                            forms_for_submit = [data]
+                          else
+                            data.submit()  
             else
               if ratafire_file_type == "video"
                 alert "" + file.name + " is not a avi, mp4, m4v, mov, mpeg4, wmv, flv, 3gpp or a webm video file."
@@ -149,6 +167,10 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                     if ratafire_file_type == "pdf"
                       return
                       alert "" + file.name + " is not a pdf file."
+                    else
+                      if ratafire_file_type == "zip"
+                        return
+                        alert "" + file.name + " is not a pdf file."
           else
             alert "Alphanumerics,-,_,and space only in filename." 
             return
@@ -166,6 +188,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
             else
               if ratafire_file_type == "pdf"
                 $("#pdf-upload-box").hide()
+              else
+                if ratafire_file_type == "zip"
+                  $("#zip-upload-box").hide()
 
       progress: (e, data) ->
         if data.context
@@ -184,6 +209,9 @@ $.fn.S3Uploader = (options,ratafire_file_type) ->
                 else
                   if ratafire_file_type == "pdf"
                     data.context.find('.bar-pdf').css('width', progress + '%')
+                  else
+                    if ratafire_file_type == "zip"
+                      data.context.find('.bar-zip').css('width', progress + '%')
 
       done: (e, data) ->
         content = build_content_object $uploadForm, data.files[0], data.result
